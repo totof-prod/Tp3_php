@@ -29,7 +29,7 @@
                 . $donnees['heure'] .'h' . $donnees['minute'] . 'm' . $donnees['seconde'] . 's' ; ?>
             </h3>
                 <p>
-                    <?php echo $donnees['contenu']; ?></br>
+                    <?php echo $donnees['contenu']; ?><br />
                     <a href="commentaires.php?id_billet=<?php echo $donnees['id'] ; ?>">Commentaires</a>
                 </p>
 
