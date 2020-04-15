@@ -9,20 +9,18 @@ function getPosts()
 function getPost($postId)
 {
     $db = dbConnect();
-    $responses = $db->prepare('SELECT title , content, 
+    $responses = $db->prepare('SELECT id, title , content, 
         DATE_FORMAT(creation_date, \'%d/%m/%Y à %Hh%imin%ss\') AS creation_date_fr FROM posts WHERE id = ?  ');
     $responses->execute(array($postId));
 
-    $post = $responses->fetch();
-
-    return $post;
+    return $responses->fetch();
 }
 
 function getComments($postId)
 {
 
     $db = dbConnect();
-    $comments = $db->prepare('SELECT author , comment, 
+    $comments = $db->prepare('SELECT id, author , comment, 
         DATE_FORMAT(comment_date, \'%d/%m/%Y à %Hh%imin%ss\') AS comment_date_fr FROM comments WHERE post_id = ?  ');
     $comments->execute(array($postId));
 
@@ -31,11 +29,14 @@ function getComments($postId)
 }
 
 function dbConnect(){
-    try {
 
-        return new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', 'root');
-    } catch (Exception $e) {
-        die('Erreur : ' . $e->getMessage());
-    }
+    return new PDO('mysql:host=localhost:8889;dbname=blog;charset=utf8', 'root', 'root');
 
+}
+
+function postComment($postId, $author, $comment)
+{
+    $db = dbConnect();
+    $comments = $db->prepare('INSERT INTO comments(post_id, author, comment, comment_date) VALUES(?, ?, ?, NOW())');
+    return $comments->execute(array($postId, $author, $comment));
 }
